@@ -4,7 +4,7 @@ keymaps file location
 
 C:\qmk-keyboard\keyboards\preonic\keymaps
 
-
+---
 
 mysys32.exe
 
@@ -12,7 +12,7 @@ cd /c/qmk-keyboard/
 
 make preonic/rev1:mine_plank
 
-
+---
 
 qmktoolbox
 
