@@ -31,11 +31,23 @@ enum preonic_keycodes {
 // Fillers to make layering more clear
 #define _______ KC_TRNS
 #define XXXXXXX KC_NO
+// Music
+#define ZELDAT M(ZELDA_TREASURE)
+#define ZELDAP M(ZELDA_PUZZLE)
+#define SONICR M(SONIC_RING)
+#define MARIOO M(ONE_UP_SOUND)
+#define MARIOC M(COIN_SOUND)
+#define BASKETC M(BASKET_CASE)
+#define IMPERIALM M(IMPERIAL_MARCH)
+#define ODE M(ODE_TO_JOY)
+#define CLOSE M(CLOSE_ENCOUNTERS_5_NOTE)
+#define CLUEB M(CLUEBOARD_SOUND)
 
 const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 
 /* Dvorak
  * ,-----------------------------------------------------------------------------------.
+ * |ZELDAT|ZELDAP|SONICR|MARIOU|MARIOC|BSKETC|IMPMRC|ODEJOY|CLOSEE|CLUEBS|______|______|
  * | Tab  |   "  |   ,  |   .  |   P  |   Y  |   F  |   G  |   C  |   R  |   L  | Bksp |
  * |------+------+------+------+------+-------------+------+------+------+------+------|
  * | Esc  |   A  |   O  |   E  |   U  |   I  |   D  |   H  |   T  |   N  |   S  |  /   |
@@ -46,7 +58,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
  * `-----------------------------------------------------------------------------------'
  */
 [_DVORAK] = {
-  {_______, _______, _______, _______, _______, _______, _______, _______,   _______,    _______, _______, _______},
+  {M(20), M(21), M(22), M(23),  M(24), M(25),M(26),M(27),M(28),M(29), _______, _______},
   {KC_TAB,  KC_QUOT, KC_COMM, KC_DOT,  KC_P,    KC_Y,    KC_F,    KC_G,    KC_C,    KC_R,    KC_L,    KC_BSPC},
   {KC_ESC,  KC_A,    KC_O,    KC_E,    KC_U,    KC_I,    KC_D,    KC_H,    KC_T,    KC_N,    KC_S,    KC_SLSH},
   {KC_LSFT, KC_SCLN, KC_Q,    KC_J,    KC_K,    KC_X,    KC_B,    KC_M,    KC_W,    KC_V,    KC_Z,    KC_ENT },
@@ -138,6 +150,34 @@ void persistent_default_layer_set(uint16_t default_layer) {
 }
 */
 
+#ifdef AUDIO_ENABLE
+float start_up[][2] = {
+   MUSICAL_NOTE(_B5, 20),
+   MUSICAL_NOTE(_B6, 8),
+   MUSICAL_NOTE(_DS6, 20),
+   MUSICAL_NOTE(_B6, 8),
+};
+
+float tone_qwerty[][2]     = SONG(QWERTY_SOUND);
+//float tone_qwerty_split[][2]     = SONG(QWERTY_SOUND);
+float tone_dvorak[][2]     = SONG(DVORAK_SOUND);
+//float tone_dvorak_split[][2]     = SONG(DVORAK_SOUND);
+
+
+float tone_zeldat[][2] = SONG(ZELDA_TREASURE);
+float tone_zeldap[][2] = SONG(ZELDA_PUZZLE);
+float tone_sonicr[][2] = SONG(SONIC_RING);
+float tone_marioo[][2] = SONG(ONE_UP_SOUND);
+float tone_marioc[][2] = SONG(COIN_SOUND);
+float tone_basketc[][2] = SONG(BASKET_CASE);
+float tone_imperialm[][2] = SONG(IMPERIAL_MARCH);
+float tone_ode[][2] = SONG(ODE_TO_JOY);
+float tone_close[][2] = SONG(CLOSE_ENCOUNTERS_5_NOTE);
+float tone_clueb[][2] = SONG(CLUEBOARD_SOUND);
+
+float goodbye[][2] = SONG(GOODBYE_SOUND);
+#endif
+
 bool process_record_user(uint16_t keycode, keyrecord_t *record) {
   switch (keycode) {
         case DVORAK:
@@ -174,36 +214,122 @@ bool process_record_user(uint16_t keycode, keyrecord_t *record) {
           break;
         case LOCK:
           if (record->event.pressed) {
-			  SEND_STRING(SS_LGUI(SS_LSFT(SS_LCTRL("w"))));
+			      SEND_STRING(SS_LGUI(SS_LSFT(SS_LCTRL("w"))));
           }
           return false;
           break;
         case COPY:
           if (record->event.pressed) {
-			  SEND_STRING(SS_LCTRL("c"));
+			      SEND_STRING(SS_LCTRL("c"));
           }
           return false;
           break;
         case PASTE:
           if (record->event.pressed) {
-			  SEND_STRING(SS_LCTRL("v"));
+			      SEND_STRING(SS_LCTRL("v"));
           }
           return false;
           break;
-		case BACKLIT:
-		  if (record->event.pressed) {
-			register_code(KC_RSFT);
-			#ifdef BACKLIGHT_ENABLE
-			  backlight_step();
-			#endif
-			PORTE &= ~(1<<6);
-		  } else {
-			unregister_code(KC_RSFT);
-			PORTE |= (1<<6);
-		  }
-		  return false;
-		  break;
-      }
+    		case BACKLIT:
+    		  if (record->event.pressed) {
+    			  register_code(KC_RSFT);
+    			#ifdef BACKLIGHT_ENABLE
+    			  backlight_step();
+    			#endif
+    			PORTE &= ~(1<<6);
+    		  } else {
+    			  unregister_code(KC_RSFT);
+    			PORTE |= (1<<6);
+    		  }
+    		  return false;
+    		  break;        
+        case 20:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_zeldat);
+            #endif
+          }
+          break;
+        case 21:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_zeldap);
+            #endif
+          }
+          break;
+        case 22:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_sonicr);
+            #endif
+          }
+          break;
+        case 23:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_marioo);
+            #endif
+          }
+          break;
+        case 24:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_marioc);
+            #endif
+          }
+          break;
+        case 25:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_basketc);
+            #endif
+          }
+          break;
+        case 26:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_imperialm);
+            #endif
+          }
+          break;
+        case 27:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_ode);
+            #endif
+          }
+          break;
+        case 28:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_close);
+            #endif
+          }
+          break;
+        case 29:
+          if (record->event.pressed) {
+            #ifdef AUDIO_ENABLE
+              PLAY_SONG(tone_clueb);
+            #endif
+          }
+          break;
     return true;
 };
+
+void matrix_init_user(void) {
+  #ifdef AUDIO_ENABLE
+    _delay_ms(20); // gets rid of tick
+    PLAY_SONG(start_up);
+  #endif
+}
+
+#ifdef AUDIO_ENABLE
+
+void play_goodbye_tone(void)
+{
+  PLAY_SONG(goodbye);
+  _delay_ms(150);
+}
+
+#endif
 
